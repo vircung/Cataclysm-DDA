@@ -36,6 +36,7 @@ os: linux
 jobs:
   include:
     - stage: compile
+      script: make -j3 RELEASE=1 CROSS="$CROSS_COMPILATION" && $WINE ./tests/cata_test $MODS
       matrix:
         exclude:
           - env: TRAVIS_EMPTY_JOB_WORKAROUND=true
@@ -172,7 +173,7 @@ before_script:
   - CXX="$COMPILER"
   - source build-scripts/requirements.sh
 
-script: make -j3 RELEASE=1 CROSS="$CROSS_COMPILATION" && $WINE ./tests/cata_test $MODS
+
 
 after_success:
   - if [ -n "${CODE_COVERAGE}" ]; then coveralls -b . -i src -e tests --gcov /usr/bin/gcov-4.8; fi
