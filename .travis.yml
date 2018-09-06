@@ -135,7 +135,7 @@ matrix:
         apt:
           packages: ["clang-5.0", "g++-multilib", "libc6-dbg", "libc6-dbg:i386", "g++-6"]
           sources: [*apt_sources, llvm-toolchain-trusty-5.0]
-          
+
     # Clang 6.0
     - env: CLANG=clang++-6.0 CXXFLAGS=-Wno-error=unused-command-line-argument
       dist: trusty
@@ -172,3 +172,8 @@ script: make -j3 RELEASE=1 CROSS="$CROSS_COMPILATION" && $WINE ./tests/cata_test
 after_success:
   - if [ -n "${CODE_COVERAGE}" ]; then coveralls -b . -i src -e tests --gcov /usr/bin/gcov-4.8; fi
   - if [ -n "${CODE_COVERAGE}" ]; then bash <(curl -s https://codecov.io/bash); fi
+
+jobs:
+  include:
+    - stage: lint
+      scrpt: make style-json
